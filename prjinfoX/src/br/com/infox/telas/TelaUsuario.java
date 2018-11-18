@@ -11,7 +11,6 @@ package br.com.infox.telas;
  */
 import java.sql.*;
 import br.com.infox.dal.ModuloConexao;
-import java.awt.Color;
 import javax.swing.JOptionPane;
 
 public class TelaUsuario extends javax.swing.JInternalFrame {
@@ -52,13 +51,12 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                 txtUserPass.setText(null);
                 cboUserPerfil.setSelectedItem(null);
             }
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e + " Erro de sintaxe SQL - Contate o administrador do sistema");
         }
     }
+    
     //Cadastro de usuários   
-
     private void adicionar() {
         String sql = "insert into tbusuarios (iduser, usuario, fone, login, senha, perfil) values (?, ?, ?, ?, ?, ?)";
         try {
@@ -118,6 +116,30 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    private void remover() {
+        //confirmar a remoção do usuário
+        int confirma = JOptionPane.showConfirmDialog(null, " Tem certeza que deseja remover o usuário? ", " Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            String sql = "delete from tbusuarios where iduser = ?";
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, txtUserId.getText());
+                int apagado = pst.executeUpdate();
+                if (apagado > 0) {
+                    JOptionPane.showMessageDialog(null, "Usuário removido com sucesso ");
+                    txtUserId.setText(null);
+                    txtUserUser.setText(null);
+                    txtUserTelf.setText(null);
+                    txtUserLog.setText(null);
+                    txtUserPass.setText(null);
+                    cboUserPerfil.setSelectedItem(null);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
         }
     }
 
@@ -192,6 +214,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         btnUserDelete.setToolTipText("Excluir");
         btnUserDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUserDelete.setPreferredSize(new java.awt.Dimension(65, 65));
+        btnUserDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUserDeleteActionPerformed(evt);
+            }
+        });
 
         btnUserUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/updateuser.png"))); // NOI18N
         btnUserUpdate.setToolTipText("Editar");
@@ -315,6 +342,10 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     private void btnUserUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserUpdateActionPerformed
         alterar();
     }//GEN-LAST:event_btnUserUpdateActionPerformed
+
+    private void btnUserDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserDeleteActionPerformed
+        remover();
+    }//GEN-LAST:event_btnUserDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
