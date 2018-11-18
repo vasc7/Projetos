@@ -5,17 +5,75 @@
  */
 package br.com.infox.telas;
 
+import br.com.infox.dal.ModuloConexao;
+import java.sql.*;
+import javax.swing.JOptionPane;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author vasco
  */
 public class TelaCliente extends javax.swing.JInternalFrame {
 
+    Connection conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
     /**
      * Creates new form TelaCliente
      */
     public TelaCliente() {
         initComponents();
+        conexao = ModuloConexao.conector();
+    }
+
+    private void adicionar() {
+        String sql = "insert into tbclientes (nome, endcli, fonecli, emailcli) values (?, ?, ?, ?)";
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtCliNome.getText());
+            pst.setString(2, txtCliEnd.getText());
+            pst.setString(3, txtCliTelf.getText());
+            pst.setString(4, txtCliMail.getText());
+            if (txtCliNome.getText().isEmpty() || txtCliTelf.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios");
+            } else {
+                int adicionado = pst.executeUpdate();
+                if (adicionado > 0) {
+                    JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso");
+                    txtCliNome.setText(null);
+                    txtCliEnd.setText(null);
+                    txtCliTelf.setText(null);
+                    txtCliMail.setText(null);
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    private void pesquisar_cliente() {
+        String sql = "select * from tbclientes where nome like ?";
+        try {
+            pst = conexao.prepareStatement(sql);
+            //concatenar o caractere % com o texto do campo (select * from tbclientes where nome like 'getText()+%')
+            pst.setString(1, txtCliFinder.getText() + "%");
+            rs = pst.executeQuery();
+            //utilizando a biblioteca rs2xml para preencher a tabela
+            tblClientes.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+        }
+    }
+    
+    //setar os campos de texto com o conteudo da tabela
+    private void setar_campos(){
+        int setar = tblClientes.getSelectedRow();
+        txtCliNome.setText(tblClientes.getModel().getValueAt(setar, 1).toString());
+        txtCliEnd.setText(tblClientes.getModel().getValueAt(setar, 2).toString());
+        txtCliTelf.setText(tblClientes.getModel().getValueAt(setar, 3).toString());
+        txtCliMail.setText(tblClientes.getModel().getValueAt(setar, 4).toString());
     }
 
     /**
@@ -65,6 +123,11 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         btnCliCreate.setToolTipText("Adicionar");
         btnCliCreate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCliCreate.setPreferredSize(new java.awt.Dimension(65, 65));
+        btnCliCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCliCreateActionPerformed(evt);
+            }
+        });
 
         btnCliUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/updateuser.png"))); // NOI18N
         btnCliUpdate.setToolTipText("Alterar");
@@ -78,16 +141,123 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nome", "Endereço", "Telefone", "Email"
             }
         ));
+        tblClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblClientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblClientes);
+
+        txtCliFinder.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCliFinderKeyReleased(evt);
+            }
+        });
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/clisearch.png"))); // NOI18N
 
@@ -155,10 +325,13 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
                     .addComponent(txtCliEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtCliMail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(txtCliMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtCliTelf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -173,6 +346,18 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCliCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCliCreateActionPerformed
+        adicionar();
+    }//GEN-LAST:event_btnCliCreateActionPerformed
+
+    private void txtCliFinderKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCliFinderKeyReleased
+        pesquisar_cliente();
+    }//GEN-LAST:event_txtCliFinderKeyReleased
+    // evento para setar os campos da tabela nos campos de texto do form de clientes
+    private void tblClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClientesMouseClicked
+        setar_campos();
+    }//GEN-LAST:event_tblClientesMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
