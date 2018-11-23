@@ -75,6 +75,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         txtCliEnd.setText(tblClientes.getModel().getValueAt(setar, 2).toString());
         txtCliTelf.setText(tblClientes.getModel().getValueAt(setar, 3).toString());
         txtCliMail.setText(tblClientes.getModel().getValueAt(setar, 4).toString());
+        btnCliCreate.setEnabled(false);
     }
 
     private void alterar() {
@@ -92,16 +93,42 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 int alterado = pst.executeUpdate();
                 if (alterado > 0) {
                     JOptionPane.showMessageDialog(null, "Dados do cliente alterados com sucesso");
+                    txtCliId.setText(null);
                     txtCliNome.setText(null);
                     txtCliEnd.setText(null);
                     txtCliTelf.setText(null);
                     txtCliMail.setText(null);
+                    btnCliCreate.setEnabled(true);
                 }
             }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
+    }
+
+    private void remover() {
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover este Cliente?", "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            String sql = "delete from tbclientes where idcli = ?";
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, txtCliId.getText());
+                int apagado = pst.executeUpdate();
+                if (apagado > 0) {
+                    JOptionPane.showMessageDialog(null, "Cliente removido com sucesso");
+                    txtCliId.setText(null);
+                    txtCliNome.setText(null);
+                    txtCliEnd.setText(null);
+                    txtCliTelf.setText(null);
+                    txtCliMail.setText(null);
+                    btnCliCreate.setEnabled(true);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+
     }
 
     /**
@@ -173,6 +200,11 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         btnCliDelete.setToolTipText("Deletar");
         btnCliDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCliDelete.setPreferredSize(new java.awt.Dimension(65, 65));
+        btnCliDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCliDeleteActionPerformed(evt);
+            }
+        });
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -413,6 +445,10 @@ public class TelaCliente extends javax.swing.JInternalFrame {
     private void btnCliUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCliUpdateActionPerformed
         alterar();
     }//GEN-LAST:event_btnCliUpdateActionPerformed
+
+    private void btnCliDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCliDeleteActionPerformed
+        remover();
+    }//GEN-LAST:event_btnCliDeleteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCliCreate;
