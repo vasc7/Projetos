@@ -105,7 +105,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             } else {
                 int alterado = pst.executeUpdate();
                 if (alterado > 0) {
-                    JOptionPane.showMessageDialog(null, "Dados do usuário alterado com sucesso");
+                    JOptionPane.showMessageDialog(null, "Dados do usuário alterados com sucesso");
                     txtUserId.setText(null);
                     txtUserUser.setText(null);
                     txtUserTelf.setText(null);
