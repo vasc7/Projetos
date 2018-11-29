@@ -63,6 +63,15 @@ public class TelaCliente extends javax.swing.JInternalFrame {
             rs = pst.executeQuery();
             //utilizando a biblioteca rs2xml para preencher a tabela
             tblClientes.setModel(DbUtils.resultSetToTableModel(rs));
+            if (txtCliFinder.getText().isEmpty()) {
+                btnCliCreate.setEnabled(true);
+                txtCliId.setText(null);
+                txtCliNome.setText(null);
+                txtCliEnd.setText(null);
+                txtCliTelf.setText(null);
+                txtCliMail.setText(null);
+            }
+            tblClientes.setVisible(true);
         } catch (Exception e) {
         }
     }
@@ -123,6 +132,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                     txtCliTelf.setText(null);
                     txtCliMail.setText(null);
                     btnCliCreate.setEnabled(true);
+                    tblClientes.setVisible(false);
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
@@ -379,7 +389,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                             .addComponent(txtCliEnd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(txtCliTelf, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtCliMail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(txtCliMail, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(94, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -407,14 +417,11 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
                     .addComponent(txtCliEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(jLabel5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(txtCliMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(29, 29, 29)
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtCliMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtCliTelf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
