@@ -8,6 +8,7 @@ package br.com.infox.telas;
 import java.sql.*;
 import br.com.infox.dal.ModuloConexao;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -111,13 +112,51 @@ public class TelaOS extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "OS não cadastrada");
             }
         } catch (com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException e) {
-            JOptionPane.showMessageDialog(null, "OS inválida");  
+            JOptionPane.showMessageDialog(null, "OS inválida");
             //System.out.println(e);
-        }catch(Exception e2){
+        } catch (Exception e2) {
             JOptionPane.showMessageDialog(null, e2);
         }
     }
-    
+
+    private void alterar_os() {
+        String sql = "update tbos set tipo = ?, situacao = ?, equipamento = ?, defeito = ?, servico = ?, tecnico = ?, valor = ? where os = ?";
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, tipo);
+            pst.setString(2, cboSit.getSelectedItem().toString());
+            pst.setString(3, txtOSEqui.getText());
+            pst.setString(4, txtOSDef.getText());
+            pst.setString(5, txtOSServ.getText());
+            pst.setString(6, txtOSTec.getText());
+            //substituir a vírgula pelo ponto
+            pst.setString(7, txtOSVT.getText().replace(",", "."));
+            pst.setString(8, txtOSNum.getText());
+            if (txtOSCliId.getText().isEmpty() || txtOSEqui.getText().isEmpty() || txtOSDef.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios");
+            } else {
+                int adicionado = pst.executeUpdate();
+                if (adicionado > 0) {
+                    JOptionPane.showMessageDialog(null, "OS alterada com sucesso");
+                    txtOSEqui.setText(null);
+                    txtOSDef.setText(null);
+                    txtOSServ.setText(null);
+                    txtOSTec.setText(null);
+                    txtOSVT.setText(null);
+                    txtOSCliId.setText(null);
+                    txtOSNum.setText(null);
+                    txtOSData.setText(null);
+                    btnCreate.setEnabled(true);
+                    txtOSFinder.setEnabled(true);
+                    tblOSCli.setVisible(true);
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -363,6 +402,11 @@ public class TelaOS extends javax.swing.JInternalFrame {
         btnUpdate.setToolTipText("Alterar");
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdate.setPreferredSize(new java.awt.Dimension(65, 65));
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/deleteuser.png"))); // NOI18N
         btnDelete.setToolTipText("Excluir");
@@ -504,6 +548,10 @@ public class TelaOS extends javax.swing.JInternalFrame {
     private void btnReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReadActionPerformed
         pesquisar_os();
     }//GEN-LAST:event_btnReadActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        alterar_os();
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
