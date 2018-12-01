@@ -157,6 +157,34 @@ public class TelaOS extends javax.swing.JInternalFrame {
         }
     }
 
+    private void excluir_os() {
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir a OS?", "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            String sql = "delete from tbos where os = ?";
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, txtOSNum.getText());
+                int apagado = pst.executeUpdate();
+                if (apagado > 0) {
+                    JOptionPane.showMessageDialog(null, "OS excluida com sucesso");
+                    txtOSEqui.setText(null);
+                    txtOSDef.setText(null);
+                    txtOSServ.setText(null);
+                    txtOSTec.setText(null);
+                    txtOSVT.setText(null);
+                    txtOSCliId.setText(null);
+                    txtOSNum.setText(null);
+                    txtOSData.setText(null);
+                    btnCreate.setEnabled(true);
+                    txtOSFinder.setEnabled(true);
+                    tblOSCli.setVisible(true);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -412,6 +440,11 @@ public class TelaOS extends javax.swing.JInternalFrame {
         btnDelete.setToolTipText("Excluir");
         btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDelete.setPreferredSize(new java.awt.Dimension(65, 65));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/icons8-print.png"))); // NOI18N
         btnPrint.setToolTipText("Imprimir");
@@ -552,6 +585,10 @@ public class TelaOS extends javax.swing.JInternalFrame {
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         alterar_os();
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        excluir_os();
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;

@@ -70,8 +70,11 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 txtCliEnd.setText(null);
                 txtCliTelf.setText(null);
                 txtCliMail.setText(null);
+                tblClientes.setVisible(false);
+            }else{
+                tblClientes.setVisible(true);
             }
-            tblClientes.setVisible(true);
+            
         } catch (Exception e) {
         }
     }
