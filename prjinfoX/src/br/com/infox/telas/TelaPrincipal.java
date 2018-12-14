@@ -5,9 +5,15 @@
  */
 package br.com.infox.telas;
 
+import br.com.infox.dal.ModuloConexao;
 import java.text.DateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import java.sql.*;
+import java.util.Locale;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -15,11 +21,14 @@ import javax.swing.JOptionPane;
  */
 public class TelaPrincipal extends javax.swing.JFrame {
 
+    Connection conexao = null;
+
     /**
      * Creates new form TelaPrincipal
      */
     public TelaPrincipal() {
         initComponents();
+        conexao = ModuloConexao.conector();
     }
 
     /**
@@ -41,6 +50,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         menCadOs = new javax.swing.JMenuItem();
         menCadUser = new javax.swing.JMenuItem();
         menRel = new javax.swing.JMenu();
+        MenRelCli = new javax.swing.JMenuItem();
         menRelServ = new javax.swing.JMenuItem();
         menAjuda = new javax.swing.JMenu();
         menAjudaSobre = new javax.swing.JMenuItem();
@@ -110,9 +120,23 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         menRel.setText("Relatório");
 
+        MenRelCli.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
+        MenRelCli.setText("Clientes");
+        MenRelCli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenRelCliActionPerformed(evt);
+            }
+        });
+        menRel.add(MenRelCli);
+
         menRelServ.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
         menRelServ.setText("Serviços");
         menRelServ.setEnabled(false);
+        menRelServ.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menRelServActionPerformed(evt);
+            }
+        });
         menRel.add(menRelServ);
 
         menu.add(menRel);
@@ -230,6 +254,36 @@ public class TelaPrincipal extends javax.swing.JFrame {
         os.setVisible(true);
         desktop.add(os);
     }//GEN-LAST:event_menCadOsActionPerformed
+
+    private void MenRelCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenRelCliActionPerformed
+        // relatório de clientes
+        int confirma = JOptionPane.showConfirmDialog(null, "Confirma a impressão deste relatório?", "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            try {
+                //usando JasperPrint para preparar a impressão do relatório
+                JasperPrint print = JasperFillManager.fillReport("C:/reports/clientes.jasper", null, conexao);
+                //exibir o relatório através do JasperViewer
+                JasperViewer.viewReport(print, false);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }//GEN-LAST:event_MenRelCliActionPerformed
+
+    private void menRelServActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menRelServActionPerformed
+        // relatório de serviços
+        int confirma = JOptionPane.showConfirmDialog(null, "Confirma a emissão deste relatório?", "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            try {
+                //usando JasperPrint para preparar a impressão do relatório
+                JasperPrint print = JasperFillManager.fillReport("C:/reports/servicos.jasper", null, conexao);
+                //exibir o relatório através do JasperViewer
+                JasperViewer.viewReport(print, false);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }//GEN-LAST:event_menRelServActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -266,6 +320,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem MenRelCli;
     private javax.swing.JDesktopPane desktop;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblDate;
