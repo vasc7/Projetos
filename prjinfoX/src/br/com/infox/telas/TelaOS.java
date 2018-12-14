@@ -7,9 +7,14 @@ package br.com.infox.telas;
 
 import java.sql.*;
 import br.com.infox.dal.ModuloConexao;
+import java.util.AbstractMap;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -179,6 +184,23 @@ public class TelaOS extends javax.swing.JInternalFrame {
                     txtOSFinder.setEnabled(true);
                     tblOSCli.setVisible(true);
                 }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
+    
+    private void imprimir_os(){
+        int confirma = JOptionPane.showConfirmDialog(null, "Confirma a impressão do Orçamento?", "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            try {
+                HashMap filtro = new HashMap();
+                filtro.put("os", Integer.parseInt(txtOSNum.getText()));
+                
+                //usando JasperPrint para preparar a impressão do relatório
+                JasperPrint print = JasperFillManager.fillReport("C:/reports/OS.jasper", filtro, conexao);
+                //exibir o relatório através do JasperViewer
+                JasperViewer.viewReport(print, false);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
@@ -450,6 +472,11 @@ public class TelaOS extends javax.swing.JInternalFrame {
         btnPrint.setToolTipText("Imprimir");
         btnPrint.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPrint.setPreferredSize(new java.awt.Dimension(65, 65));
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
 
         jLabel11.setText("* Campos Obrigatórios");
 
@@ -589,6 +616,10 @@ public class TelaOS extends javax.swing.JInternalFrame {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         excluir_os();
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+        imprimir_os();
+    }//GEN-LAST:event_btnPrintActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
